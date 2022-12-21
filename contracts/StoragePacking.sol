@@ -5,9 +5,6 @@ pragma solidity ^0.8.9;
 // import "hardhat/console.sol";
 
 contract StoragePacking {
-    constructor() {
-    }
-
     uint128 public one;
     uint128 public two;
 

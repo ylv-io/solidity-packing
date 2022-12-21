@@ -25,7 +25,7 @@ contract StoragePackingTest is Test {
     }
 
     function testGetOneSmart() public {
-        packing.setFullSlot(1 | 2 << 128);
+        packing.setFullSlot(1 | (2 << 128));
         uint256 slot = packing.slot();
         uint256 one = slot & 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
         assertEq(one, 1);
@@ -38,9 +38,18 @@ contract StoragePackingTest is Test {
     }
 
     function testGetTwoSmart() public {
-        packing.setFullSlot(1 | 2 << 128);
+        packing.setFullSlot(1 | (2 << 128));
         uint256 slot = packing.slot();
         uint256 two = (slot >> 128) & 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+        assertEq(two, 2);
+    }
+
+    function testGetOneAndTwoDumb() public {
+        packing.setOne(1);
+        packing.setTwo(2);
+        uint128 one = packing.one();
+        uint128 two = packing.two();
+        assertEq(one, 1);
         assertEq(two, 2);
     }
 
@@ -48,6 +57,15 @@ contract StoragePackingTest is Test {
         packing.setOne(1);
         packing.setTwo(2);
         (uint128 one, uint128 two) = packing.getOneAndTwo();
+        assertEq(one, 1);
+        assertEq(two, 2);
+    }
+
+    function testGetOneAndTwoSmart() public {
+        packing.setFullSlot(1 | (2 << 128));
+        uint256 slot = packing.slot();
+        uint256 one = slot & 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+        uint256 two = (slot >> 128) & 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
         assertEq(one, 1);
         assertEq(two, 2);
     }
